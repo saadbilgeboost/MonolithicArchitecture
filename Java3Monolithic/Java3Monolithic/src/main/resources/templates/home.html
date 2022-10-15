@@ -1,0 +1,186 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HomePage</title>
+  <!-- http://localhost:9090/css/home.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+
+<div class="container">
+
+  <div class="row header">
+    <h1 th:text="${model.title}"></h1>
+  </div>
+  <div class="row main">
+    <div class="col-md-2 navbar-muh">
+      <img th:src="${model.avatar}" class="avatar"/> <br>
+
+
+      <label th:text="${model.username}"></label> <br><br>
+
+      <div class="row">
+        <ol>
+          <li th:each="item,index :${model.menu}">
+            <label th:text="${item}"></label>
+          </li>
+
+        </ol>
+      </div>
+
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-8">
+          <form action="http://localhost:9090/product/save" method="post">
+            <div class="mb-3">
+              <input type="text" class="form-control" name="id" disabled placeholder="id">
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control" name="name" placeholder="Please enter name of the Product...">
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control" name="brand" placeholder="Please enter name of the Brand...">
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control"  name="model" placeholder="Please enter the Model of the Product...">
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control" name="price" placeholder="Please enter the Price of the product...">
+            </div>
+            <div class="mb-3">
+              <input type="text" class="form-control"  name="stock" placeholder="Please enter the Stock quantity...">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+          </form>
+        </div>
+
+      </div>
+      <div class="row" style="margin-top:15px ;">
+        <table class="table table-primary table-hover">
+          <thead>
+          <tr>
+            <th class="col-1">Id</th>
+            <th class="col-2">Name</th>
+            <th class="col-2" >Brand</th>
+            <th class="col-2">Model</th>
+            <th class="col-1" >Price</th>
+            <th class="col-1">Stock</th>
+            <th class="col-xl-1 col-md-2 col-2" >Operations</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="product,index : ${model.products}">
+            <th scope="row"><label th:text="${product.id}"/></th>
+            <td><label th:text="${product.name}"/></td>
+            <td><label th:text="${product.brand}"/></td>
+            <td><label th:text="${product.model}"/></td>
+            <td><label th:text="${product.price}"/></td>
+            <td><label th:text="${product.stock}"/></td>
+            <td>
+              <a href="#" class="btn btn-primary col-5"  style="margin: 1px;"
+                 data-bs-toggle="modal" data-bs-target="#edit-modal">
+                <i class="fa fa-user-pen"></i>
+              </a>
+              <a href="#" class="btn btn-danger col-5" style="margin: 1px;" onclick="erase()">
+                <i class="fa fa-eraser"></i>
+              </a>
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="http://localhost:9090/customer/save" method="post">
+          <div class="mb-3">
+            <label class="form-label">Id</label>
+            <input type="text" class="form-control" name="id">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" name="name" >
+          </div>
+          <div class="mb-3">
+            <label  class="form-label">Surname</label>
+            <input type="text" class="form-control" name="surname" >
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control"  name="address">
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" hidden>Edit</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // Parametresiz function
+  function click(){
+    alert("Clicked");
+  }
+  // Parametreli function
+  function click2(id){
+    alert("Clicked" + id);
+  }
+
+  function click3(isdelete){
+    if(isdelete == 'OK')
+      alert('Deleted');
+    else
+      alert('Delete operation is canceled');
+  }
+
+</script>
+
+<script>
+  function erase(){
+    Swal.fire({
+      title: 'Delete Operation',
+      text: "Do you want to delete the selected data?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes Delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+        ).then(() =>{
+          alert('The transaction is complete.');
+        });
+      }else{
+        alert('Deletion operation cancelled');
+      }
+    })
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+</body>
+</html>
